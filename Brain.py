@@ -15,14 +15,67 @@ try:
 except LookupError:
     nltk.download('stopwords')
 
-# --- NLP CLEANING FUNCTION ---
+import re
+
+# Add this global mapping
+SYNONYMS = {
+    "bangtan": "bts",
+    "boys": "bts",
+    "bulletproof": "bts",
+    "beyond the scene": "bts",
+    "seokjin": "jin",
+    "namjoon": "rm",
+    "yoongi": "suga",
+    "hoseok": "j-hope",
+    "jimin": "jimin",
+    "taehyung": "v",
+    "jungkook": "jungkook"
+}
+
 def clean_text(text):
-    # Convert to lowercase and tokenize
     stop_words = set(stopwords.words('english'))
+    # Remove weird PDF spacing issues (e.g., "f ateful" -> "fateful")
+    # This regex looks for letters separated by a single space that should be joined
+    text = re.sub(r'(\b[a-z])\s+(?=[a-z]\b)', r'\1', text.lower())
+
     words = word_tokenize(text.lower())
-    # Remove non-alphabetical characters and stop words
-    cleaned = [w for w in words if w.isalpha() and w not in stop_words]
+    cleaned = []
+    for w in words:
+        if w.isalpha() and w not in stop_words:
+            # APPLY SYNONYM MAPPING
+            word_to_add = SYNONYMS.get(w, w)
+            cleaned.append(word_to_add)
     return " ".join(cleaned)
+
+#___THE SEARCH ENGENE___
+def find_answer(user_question, pages):
+    all_chunks = []
+    for page in pages:
+        # Filter out page numbers or very short headers
+        lines = [line.strip() for line in page.split('\n') if len(line.strip()) > 5]
+        all_chunks.extend(lines)
+
+    cleaned_chunks = [clean_text(c) for c in all_chunks]
+    cleaned_query = clean_text(user_question)
+
+    vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+    tfidf_matrix = vectorizer.fit_transform(cleaned_chunks + [cleaned_query])
+
+    similarity_scores = cosine_similarity(tfidf_matrix[-1], tfidf_matrix[:-1])
+    best_match_index = similarity_scores.argmax()
+
+    if similarity_scores[0][best_match_index] < 0.1:
+        return "I'm sorry, the book doesn't seem to mention that specifically."
+
+    # --- THE CONTEXT UPGRADE ---
+    # Grab the best line and a few lines around it for context
+    start = max(0, best_match_index - 3)
+    end = min(len(all_chunks), best_match_index + 4)
+
+    # Join them together into a paragraph
+    context_snippet = "\n".join(all_chunks[start:end])
+
+    return context_snippet
 
 # --- PDF EXTRACTION ---
 def extract_text_from_pdf(file_path):
@@ -40,34 +93,6 @@ def extract_text_from_pdf(file_path):
     except Exception as e:
         print(f"Error: {e}")
         return []
-
-# --- THE SEARCH ENGINE ---
-def find_answer(user_question, pages):
-    # 1. Break pages into smaller paragraphs for better precision
-    all_paragraphs = []
-    for page in pages:
-        # Split by double newlines or large spaces (common for paragraphs)
-        parts = page.split('\n\n')
-        all_paragraphs.extend([p.strip() for p in parts if len(p.strip()) > 50])
-
-    # 2. Preprocess
-    cleaned_paragraphs = [clean_text(p) for p in all_paragraphs]
-    cleaned_query = clean_text(user_question)
-
-    # 3. Vectorization (Math)
-    vectorizer = TfidfVectorizer()
-    tfidf_matrix = vectorizer.fit_transform(cleaned_paragraphs + [cleaned_query])
-
-    # 4. Cosine Similarity
-    similarity_scores = cosine_similarity(tfidf_matrix[-1], tfidf_matrix[:-1])
-    best_match_index = similarity_scores.argmax()
-
-    # If the score is very low, the AI is just guessing
-    if similarity_scores[0][best_match_index] < 0.15:
-        return "I'm sorry, I couldn't find a specific section in the book that answers that."
-
-    return all_paragraphs[best_match_index]
-
 
 # --- EXECUTION ---
 if __name__ == "__main__":
