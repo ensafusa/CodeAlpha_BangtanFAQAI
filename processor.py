@@ -1,4 +1,3 @@
-# processor.py
 import fitz
 import re
 import os
@@ -11,7 +10,6 @@ def get_book_chunks(pdf_path):
     chunks = []
     cache_file = "full_book_cache.txt"
 
-    # 1. Load the Main Book Text (from cache or PDF)
     if os.path.exists(cache_file):
         with open(cache_file, "r", encoding="utf-8") as f:
             chunks = f.read().split("---PAGE_BREAK---")
@@ -27,15 +25,11 @@ def get_book_chunks(pdf_path):
         with open(cache_file, "w", encoding="utf-8") as f:
             f.write(full_text_to_save)
 
-    # ==========================================
-    # 2. INSERT YOUR OCR DATA BLOCK HERE
-    # ==========================================
+
     if os.path.exists("ocr_cache.txt"):
         with open("ocr_cache.txt", "r", encoding="utf-8") as f:
             ocr_data = f.read()
-            # Split by your custom header
             ocr_chunks = ocr_data.split("--- DATA FROM")
-            # Filter and add to the main chunks list
             chunks.extend([c.strip() for c in ocr_chunks if len(c.strip()) > 10])
 
     return chunks

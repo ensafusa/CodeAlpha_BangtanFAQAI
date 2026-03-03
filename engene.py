@@ -1,20 +1,14 @@
-# engene.py
 from groq import Groq
 from config import GROQ_API_KEY, GROQ_MODEL, CONTEXT_WINDOW, SIMILARITY_THRESHOLD, SYNONYMS
 from processor import clean_text
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Initialize Groq Client
 client = Groq(api_key=GROQ_API_KEY)
 
 def find_best_answer(query, chunks, chat_history=[]):
     processed_query = query.lower()
 
-    # --- 1. THE ALBUM "CHEAT SHEET" ---
-    # This forces the search engine to prioritize these specific OCR pages
-    # --- 1. THE ALBUM "CHEAT SHEET" ---
-    # Maps every album in the book to its specific high-quality OCR page
     album_map = {
         "author":"PAGE 32",
         "book release date": "PAGE 32",
@@ -55,44 +49,34 @@ def find_best_answer(query, chunks, chat_history=[]):
         "proof": "PAGE 398 PAGE 399"
     }
 
-    # Identify if the user is asking for a list
     is_list_query = any(word in processed_query for word in ["tracklist", "songs", "list", "tracks", "discography"])
 
-    # Filter out Table of Contents (TOC) for list queries to avoid distraction
     if is_list_query:
         search_chunks = [c for c in chunks if "CONTENTS" not in c and "CHAPTER" not in c]
-        # Inject the specific page number into the search query if an album is mentioned
         for album, page in album_map.items():
             if album in processed_query:
-                # This makes the TF-IDF search "gravitate" toward your OCR blocks
                 processed_query += f" --- DATA FROM {page} ---"
     else:
         search_chunks = chunks
 
-    # --- 2. SEARCH LOGIC (TF-IDF) ---
     cleaned_chunks = [c.lower() for c in search_chunks]
     vectorizer = TfidfVectorizer(ngram_range=(1, 2))
 
-    # Fit and transform the context chunks + the query
     tfidf_matrix = vectorizer.fit_transform(cleaned_chunks + [processed_query])
     scores = cosine_similarity(tfidf_matrix[-1], tfidf_matrix[:-1])
 
-    # Massive boost for OCR pages (DATA FROM PAGE) during tracklist searches
     if is_list_query:
         for i, chunk in enumerate(search_chunks):
             if "--- DATA FROM PAGE" in chunk:
-                scores[0][i] *= 5.0  # Force the OCR page to the top
+                scores[0][i] *= 5.0
 
     best_idx = scores.argmax()
 
-    # --- 3. CONTEXT BUILDING ---
-    # We only need the specific page for a tracklist (window=0 or 1)
     window = 3 if is_list_query else CONTEXT_WINDOW
     start = max(0, best_idx - window)
     end = min(len(search_chunks), best_idx + window + 1)
     raw_knowledge = "\n".join(search_chunks[start:end])
 
-    # --- 4. THE "CODE-BREAKER" SYSTEM PROMPT ---
     system_prompt = (
         "You are an expert BTS historian providing information based on the official "
         "biography 'Beyond The Story'.\n\n"
@@ -114,10 +98,8 @@ def find_best_answer(query, chunks, chat_history=[]):
         "* Song Title 3"
     )
 
-    # --- 5. GENERATION ---
     messages = [{"role": "system", "content": system_prompt}]
 
-    # Add relevant chat history for memory
     for msg in chat_history[-3:]:
         messages.append({"role": msg["role"], "content": msg["content"]})
 
@@ -130,7 +112,7 @@ def find_best_answer(query, chunks, chat_history=[]):
         completion = client.chat.completions.create(
             model=GROQ_MODEL,
             messages=messages,
-            temperature=0  # Keep it strictly factual
+            temperature=0
         )
         return completion.choices[0].message.content, raw_knowledge
     except Exception as e:

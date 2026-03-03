@@ -1,4 +1,3 @@
-# test_vars.py
 try:
     from config import GROQ_MODEL
     print(f"✅ Success! GROQ_MODEL is: {GROQ_MODEL}")
