@@ -1,13 +1,18 @@
-# ---Bangtan FAQ AI: Beyond the Story
-### *An Intelligent Contextual Search Engine for the BTS 10th Anniversary Memoir*
+ Bangtan FAQ AI: Beyond the Story
+----------------------------------------
+----------------------------------------
+
+ *An Intelligent Contextual Search Engine for the BTS 10th Anniversary Memoir*
+--------------------------------------------------------------------------------------------
 
 ![BTS Logo](https://img.shields.io/badge/BTS-Borahae-purple) ![Python](https://img.shields.io/badge/Python-3.13-blue) ![Groq](https://img.shields.io/badge/Inference-Groq_LPU-orange)
 
-**Bangtan FAQ AI** is an advanced RAG (Retrieval-Augmented Generation) application that transforms the 400+ page official BTS biography into a searchable, interactive knowledge base. By combining traditional NLP with cutting-edge LLM inference, it provides 100% accurate, context-aware answers grounded in the book's narrative.
+**Bangtan FAQ AI** iAn AI-powered contextual search engine designed to navigate the BTS 10th Anniversary Memoir. This tool transforms a static 400+ page PDF into an interactive, searchable knowledge base.
 
 ---
 
-## ---The "ENGENE" Pipeline
+---The "ENGENE" Pipeline
+---------------------------
 This application uses a custom-built **NLP & Inference Pipeline** to ensure accuracy and speed:
 
 * **Semantic Preprocessing:** Cleans OCR noise and tokenizes text via **NLTK**, handling multi-column layouts from the original PDF.
@@ -18,7 +23,8 @@ This application uses a custom-built **NLP & Inference Pipeline** to ensure accu
 
 ---
 
-## ---Key Features
+---Key Features
+--------------------------
 
 * **Verified Discography:** Specialized handling for multi-CD albums (e.g., *Proof*, *MOTS 7*) with vertical list formatting.
 * **Borahae UI:** A custom-styled **Streamlit** interface featuring signature purple aesthetics and ARMY/BTS avatars.
@@ -27,7 +33,8 @@ This application uses a custom-built **NLP & Inference Pipeline** to ensure accu
 
 ---
 
-## ---Project Structure
+---Project Structure
+-------------------------
 
 ```text
 ├── app.py              # Streamlit interface & chat session management
@@ -38,7 +45,8 @@ This application uses a custom-built **NLP & Inference Pipeline** to ensure accu
 └── requirements.txt    # Project dependencies
 ```
 ---
-## ---Installation & Setup
+---Installation & Setup
+-------------------------
 
 **1. Clone & Install**
 ```Bash
@@ -63,4 +71,28 @@ GROQ_API_KEY=your_key_here
 **4. Launch the App**
 ```Bash
    streamlit run app.py
+```
+
+---Tech Stack
+---------------------
+```text
+Language: Python 3.13
+
+Inference Engine: Groq Cloud (Llama 3.3 70B)
+
+NLP & ML: NLTK, Scikit-learn (TF-IDF, Cosine Similarity)
+
+UI Framework: Streamlit
+
+Data Engine: PyMuPDF / PyPDF2
+```
+
+---License & Credits
+-----------------------
+```text
+Developed as an AI Internship Project for CodeAlpha.
+
+Author: [NotSoArmyGemini/Twin]
+
+Topic: Beyond the Story: 10-Year Record of BTS Framework: Open-source AI Development
 ```
