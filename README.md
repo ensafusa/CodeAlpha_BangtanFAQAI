@@ -1,10 +1,13 @@
-# 💜 Bangtan FAQ AI: Beyond the Story
+#  Bangtan FAQ AI: Beyond the Story
+------------------------------------------
+******************************************
 
 An AI-powered contextual search engine designed to navigate the **BTS 10th Anniversary Memoir**. This tool transforms a static 400+ page PDF into an interactive, searchable knowledge base.
 
 ---
 
-## 🧠 The "ENGENE" Logic
+## --The "ENGENE" Logic
+-----------------------------
 This application moves beyond simple keyword matching by using a structured **NLP Pipeline**:
 
 1.  **Preprocessing:** Cleans PDF "noise" and tokenizes text using **NLTK**.
@@ -17,7 +20,8 @@ This application moves beyond simple keyword matching by using a structured **NL
 
 ---
 
-## 🛠️ Project Structure
+## --Project Structure
+----------------------------
 The project follows a modular architecture for professional-grade code management:
 
 * **`app.py`**: The Streamlit web interface and session state manager.
@@ -28,7 +32,8 @@ The project follows a modular architecture for professional-grade code managemen
 
 ---
 
-## 🚀 Installation & Setup
+## --Installation & Setup
+----------------------------
 
 ### 1. Install Dependencies
 Ensure you have Python installed, then run:
@@ -44,7 +49,10 @@ Start the web server to open the interface in your browser:
 
 Bash
 streamlit run app.py
-🛠️ Tech Stack
+
+
+--Tech Stack
+---------------------
 Language: Python 3.13
 
 NLP: NLTK (Natural Language Toolkit)
@@ -55,7 +63,8 @@ UI Framework: Streamlit
 
 PDF Engine: PyPDF2
 
-📝 License & Credits
+--License & Credits
+-----------------------
 Developed as an AI Internship Project for CodeAlpha.
 
 Author: [NotSoArmyGemini/Twin]
