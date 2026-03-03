@@ -1,72 +1,66 @@
-#  Bangtan FAQ AI: Beyond the Story
-------------------------------------------
-******************************************
+# ---Bangtan FAQ AI: Beyond the Story
+### *An Intelligent Contextual Search Engine for the BTS 10th Anniversary Memoir*
 
-An AI-powered contextual search engine designed to navigate the **BTS 10th Anniversary Memoir**. This tool transforms a static 400+ page PDF into an interactive, searchable knowledge base.
+![BTS Logo](https://img.shields.io/badge/BTS-Borahae-purple) ![Python](https://img.shields.io/badge/Python-3.13-blue) ![Groq](https://img.shields.io/badge/Inference-Groq_LPU-orange)
 
----
-
-## --The "ENGENE" Logic
------------------------------
-This application moves beyond simple keyword matching by using a structured **NLP Pipeline**:
-
-1.  **Preprocessing:** Cleans PDF "noise" and tokenizes text using **NLTK**.
-2.  **Semantic Mapping:** Uses a custom synonym layer (in `config.py`) to ensure the AI knows "Bangtan" = "BTS".
-3.  **Vectorization:** Transforms text into mathematical signatures using **TF-IDF**.
-4.  **Similarity:** Calculates the **Cosine Similarity** to find the most relevant passage.
-5.  **Context Window:** Returns the target answer along with surrounding lines to maintain narrative flow.
-
-
+**Bangtan FAQ AI** is an advanced RAG (Retrieval-Augmented Generation) application that transforms the 400+ page official BTS biography into a searchable, interactive knowledge base. By combining traditional NLP with cutting-edge LLM inference, it provides 100% accurate, context-aware answers grounded in the book's narrative.
 
 ---
 
-## --Project Structure
-----------------------------
-The project follows a modular architecture for professional-grade code management:
+## ---The "ENGENE" Pipeline
+This application uses a custom-built **NLP & Inference Pipeline** to ensure accuracy and speed:
 
-* **`app.py`**: The Streamlit web interface and session state manager.
-* **`engene.py`**: The mathematical core (Vectorization & Similarity).
-* **`processor.py`**: The data pipeline (PDF parsing & text cleaning).
-* **`config.py`**: Global settings, synonym maps, and thresholds.
-* **`requirements.txt`**: List of necessary Python libraries.
+* **Semantic Preprocessing:** Cleans OCR noise and tokenizes text via **NLTK**, handling multi-column layouts from the original PDF.
+* **Vectorized Retrieval:** Maps user queries into a high-dimensional space using **TF-IDF Vectorization** to find the exact page and paragraph.
+* **Contextual Smoothing:** Employs **Cosine Similarity** to retrieve not just a keyword, but the surrounding "Context Window" for a narrative-rich response.
+* **LPU-Powered Inference:** Passes the retrieved context to **Llama 3.3 (via Groq)**. Using Groq’s LPU (Language Processing Unit) allows for near-instant response times.
+* **Strict Prompt Engineering:** A specialized System Prompt prevents hallucinations, ensuring the AI only reports facts found in the memoir.
 
 ---
 
-## --Installation & Setup
-----------------------------
+## ---Key Features
 
-### 1. Install Dependencies
-Ensure you have Python installed, then run:
-```bash
-pip install -r requirements.txt
-2. Setup AI Resources
-Download the necessary NLP models for tokenization and text cleaning:
+* **Verified Discography:** Specialized handling for multi-CD albums (e.g., *Proof*, *MOTS 7*) with vertical list formatting.
+* **Borahae UI:** A custom-styled **Streamlit** interface featuring signature purple aesthetics and ARMY/BTS avatars.
+* **Intelligent Synonyms:** A custom mapping layer in `config.py` that understands BTS-specific terminology (e.g., "Bangtan", "Hwayangyeonhwa").
+* **High-Speed Search:** Sub-second retrieval and generation powered by the **Groq API**.
 
-Bash
-python -c "import nltk; nltk.download('punkt_tab'); nltk.download('stopwords')"
-3. Launch the UI
-Start the web server to open the interface in your browser:
+---
 
-Bash
-streamlit run app.py
+## ---Project Structure
 
+```text
+├── app.py              # Streamlit interface & chat session management
+├── engene.py           # Mathematical core (Retrieval & Prompt Logic)
+├── processor.py        # Data pipeline (PDF parsing & OCR management)
+├── config.py           # Global settings, synonym maps, & thresholds
+├── assets/             # Branding assets (army.png, bts.png)
+└── requirements.txt    # Project dependencies
+```
+---
+## ---Installation & Setup
 
---Tech Stack
----------------------
-Language: Python 3.13
+**1. Clone & Install**
+```Bash
+  git clone https://github.com/yourusername/bangtan-faq-ai.git
+  cd bangtan-faq-ai
+  pip install -r requirements.txt
+``` 
 
-NLP: NLTK (Natural Language Toolkit)
+**2. Initialize NLP Models**
+```python
+    import nltk
+    # Download necessary resources for the ENGENE pipeline
+    nltk.download(['punkt_tab', 'stopwords'])
+```
 
-Machine Learning: Scikit-learn (TF-IDF, Cosine Similarity)
+**3. Configure API Key**
+   Create a .env file in the root directory and add your Groq API Key:
+```Plaintext
+GROQ_API_KEY=your_key_here
+```
 
-UI Framework: Streamlit
-
-PDF Engine: PyPDF2
-
---License & Credits
------------------------
-Developed as an AI Internship Project for CodeAlpha.
-
-Author: NotSoArmyGemini/Twin
-
-Topic: Beyond the Story: 10-Year Record of BTS Framework: Open-source AI Development for ARMY and BTS enthusiasts.
+**4. Launch the App**
+```Bash
+   streamlit run app.py
+```
