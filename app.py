@@ -18,9 +18,7 @@ with st.sidebar:
 
 @st.cache_resource
 def load_data():
-    # Show progress so you know it's not crashed
-    with st.status("Extracting book content (this may take a minute)..."):
-        return get_book_chunks(PDF_PATH)
+    return get_book_chunks(PDF_PATH)
 
 chunks = load_data()
 
@@ -38,8 +36,8 @@ if prompt := st.chat_input("Ask me about the book..."):
 
     with st.spinner("Thinking..."):
         # We now return TWO things: the smart answer and the raw source
-        # Pass the full chat history (st.session_state.messages) to the engine
-        smart_answer, source_text = find_best_answer(prompt, chunks, st.session_state.messages)
+        smart_answer, source_text = find_best_answer(prompt, chunks)
+
     with st.chat_message("assistant"):
         st.markdown(smart_answer)
         # Professional touch: show the source in an accordion
