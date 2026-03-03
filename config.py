@@ -8,7 +8,8 @@ load_dotenv()
 # --- API KEYS ---
 # It will now pull the key from your .env file automatically
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "llama-3.1-8b-instant"
+#GROQ_MODEL = "llama-3.3-70b-versatile"
 
 # --- CONSOLE DEBUGGING ---
 if GROQ_API_KEY:
