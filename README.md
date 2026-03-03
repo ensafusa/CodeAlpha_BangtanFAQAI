@@ -67,6 +67,6 @@ PDF Engine: PyPDF2
 -----------------------
 Developed as an AI Internship Project for CodeAlpha.
 
-Author: [NotSoArmyGemini/Twin]
+Author: NotSoArmyGemini/Twin
 
-Topic: Beyond the Story: 10-Year Record of BTS Framework: Open-source AI Development
+Topic: Beyond the Story: 10-Year Record of BTS Framework: Open-source AI Development for ARMY and BTS enthusiasts.
