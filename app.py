@@ -24,20 +24,32 @@ def load_data():
 
 chunks = load_data()
 
+def clear_selection():
+    if st.session_state.album_choice != "Select...":
+        # Store the query in session state
+        st.session_state.queued_query = f"give me the track list of {st.session_state.album_choice}"
+        # Force the selectbox back to the default "Select..."
+        st.session_state.album_choice = "Select..."
+
 with st.sidebar:
     st.header("💜 Discography")
 
     album_list = [
         "Select...", "2 Cool 4 Skool", "O!RUL8,2?", "Skool Luv Affair",
         "Dark&Wild", "The Most Beautiful Moment in Life Pt.1",
-        "The Most Beautiful Moment in Life Pt.2", "Young Forever",
+        "The Most Beautiful Moment in Life Pt.2", "The Most Beautiful Moment in Life: Young Forever",
         "Wings", "You Never Walk Alone", "Love Yourself 'Her'",
         "Love Yourself 'Tear'", "Love Yourself 'Answer'",
         "Map of the Soul: Persona", "Map of the Soul: 7",
         "Dynamite", "BE", "Butter", "Proof"
     ]
 
-    selected_album = st.selectbox("Quick Tracklist:", album_list)
+    selected_album = st.selectbox(
+        "Quick Tracklist:",
+        album_list,
+        key="album_choice",
+        on_change=clear_selection
+    )
 
     if selected_album != "Select...":
         st.session_state.queued_query = f"give me the track list of {selected_album}"

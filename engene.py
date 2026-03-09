@@ -1,4 +1,8 @@
+import json
+import re
+
 from groq import Groq
+
 from config import GROQ_API_KEY, GROQ_MODEL, CONTEXT_WINDOW, SIMILARITY_THRESHOLD, SYNONYMS
 from processor import clean_text
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -6,8 +10,47 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 client = Groq(api_key=GROQ_API_KEY)
 
+def normalize_string(text):
+    text = text.lower().replace(":", " ")
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+def format_json_response(album_name, data):
+    release_date = data.get('release_date') or data.get('RELEASE_DATE', 'N/A')
+    album_type= data.get('type') or data.get('TYPE', 'N/A')
+    output = f"**{album_name.upper()}** **({album_type.upper()})** ({release_date})\n\n"
+
+    for key, value in data.items():
+        if key.lower() not in ['type', 'release_date']:
+
+            if "cd" in key.lower():
+                output += f"\n**{key.upper()}**\n"
+
+            if isinstance(value, list):
+                for track in value:
+                    output += f"* {track}\n"
+            else:
+                output += f"* {value}\n"
+
+    return output
+
 def find_best_answer(query, chunks, chat_history=[]):
-    processed_query = query.lower()
+    processed_query = normalize_string(query)
+
+    try:
+        with open('discography.json', 'r') as f:
+            disco_data = json.load(f)
+        sorted_albums = sorted(disco_data.keys(), key=len, reverse=True)
+
+        for album_name, data in disco_data.items():
+            normalized_album = normalize_string(album_name)
+            print(album_name)
+            print(normalized_album)
+            if normalized_album in processed_query:
+                return format_json_response(album_name, data), "JSON Ground Truth"
+
+    except Exception as e:
+        print(f"Error: {e}")
 
     album_map = {
         "author":"PAGE 32",
