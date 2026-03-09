@@ -37,6 +37,9 @@ def format_json_response(album_name, data):
 def find_best_answer(query, chunks, chat_history=[]):
     processed_query = normalize_string(query)
 
+    tracklist_keywords = ["tracklist", "songs", "tracks", "list of songs"]
+    is_list_request = any(word in processed_query for word in tracklist_keywords)
+
     try:
         with open('discography.json', 'r') as f:
             disco_data = json.load(f)
@@ -46,7 +49,7 @@ def find_best_answer(query, chunks, chat_history=[]):
             normalized_album = normalize_string(album_name)
             print(album_name)
             print(normalized_album)
-            if normalized_album in processed_query:
+            if normalized_album in processed_query and is_list_request:
                 return format_json_response(album_name, data), "JSON Ground Truth"
 
     except Exception as e:
