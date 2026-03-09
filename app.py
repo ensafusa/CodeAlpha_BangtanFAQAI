@@ -26,9 +26,7 @@ chunks = load_data()
 
 def clear_selection():
     if st.session_state.album_choice != "Select...":
-        # Store the query in session state
         st.session_state.queued_query = f"give me the track list of {st.session_state.album_choice}"
-        # Force the selectbox back to the default "Select..."
         st.session_state.album_choice = "Select..."
 
 with st.sidebar:
