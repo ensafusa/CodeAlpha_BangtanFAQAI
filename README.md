@@ -92,7 +92,7 @@ Data Engine: PyMuPDF / PyPDF2
 ```text
 Developed as an AI Internship Project for CodeAlpha.
 
-Author: [NotSoArmyGemini/Twin]
+Author: Doha EL IDRISSI
 
 Topic: Beyond the Story: 10-Year Record of BTS Framework: Open-source AI Development
 ```
