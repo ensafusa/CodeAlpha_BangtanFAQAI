@@ -7,7 +7,7 @@
 
 ![BTS Logo](https://img.shields.io/badge/BTS-Borahae-purple) ![Python](https://img.shields.io/badge/Python-3.13-blue) ![Groq](https://img.shields.io/badge/Inference-Groq_LPU-orange)
 
-**Bangtan FAQ AI** iAn AI-powered contextual search engine designed to navigate the BTS 10th Anniversary Memoir. This tool transforms a static 400+ page PDF into an interactive, searchable knowledge base.
+**Bangtan FAQ AI** is An AI-powered contextual search engine designed to navigate the BTS 10th Anniversary Memoir. This tool transforms a static 400+ page PDF into an interactive, searchable knowledge base.
 
 ---
 
